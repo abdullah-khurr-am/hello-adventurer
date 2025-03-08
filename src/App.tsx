@@ -37,7 +37,11 @@ function App() {
   }, [shouldSendChoice, adventureInput]);
 
   const bootStrapAdventure = async () => {
-    await axios.post(`${BASE_URL}/start_adventure`).then((response) => {
+    await axios.post(`${BASE_URL}/start_adventure`, null, {
+      headers: {
+        authorization: import.meta.env.VITE_ADVENTURER_AUTH_KEY as string
+      }
+    }).then((response) => {
       setLoading(false);
       const adventureStart: AdventureHistory = { role: 'Assistant', content: response.data };
       setAdventureHistory([adventureStart]);
@@ -58,7 +62,11 @@ function App() {
   const sendUserChoice = async () => {
     if (adventureInput === '') return;
     setLoading(true);
-    await axios.post(`${BASE_URL}/adventure_choice`, { choice: adventureInput }).then((response) => {
+    await axios.post(`${BASE_URL}/adventure_choice`, { choice: adventureInput }, {
+      headers: {
+        authorization: import.meta.env.VITE_ADVENTURER_AUTH_KEY as string
+      }
+    }).then((response) => {
       setLoading(false);
       setAdventureHistory(response.data);
     });
